@@ -35,5 +35,16 @@ pipeline {
                 sh ''' docker build -t syedumer17/loginregisterapp:$BUILD_NUMBER .'''
             }
         }
+        stage('Registery Login'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: '7', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                    sh 'docker login -u $USERNAME -p $PASSWORD'
+            }
+        }
+        stage('push Docker Image') {
+            steps{
+                sh '''docker build -t syedumer17/loginregisterapp:$BUILD_NUMBER .'''
+            }
+        }
     }
 }
