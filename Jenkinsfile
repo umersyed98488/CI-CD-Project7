@@ -24,5 +24,10 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage('Artifactory') {
+            steps{
+                sh 'aws s3 cp $WORKSPACE/target/*.war s3://b90-artifactory/loginregisterapp-$BUILD_NUMBER.war'
+            }
+        }
     }
 }
