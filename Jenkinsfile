@@ -1,19 +1,34 @@
 pipeline {
-    agent any
+    agent any 
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
         maven "maven"
     }
     stages {
-        stage('Pull Code Form Git Hub Repo') {
+        stage('clean') {
             steps {
-                git 'https://github.com/vedantguptha/CI-CD-Project7.git'
+                cleanWs()
             }
         }
-        stage('Build Code') {
+        stage('code commit') {
             steps {
-                 sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+                git 'https://github.com/umersyed98488/CI-CD-Project7.git'
             }
         }
+        stage('Integration test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('artifactory') {
+            steps{
+                sh 'aws s3 cp $WORKSPACE/target/*.war s3://b90-artifactory/loginregisterapp-$BUILD_NUMBER.war'
+            }
+        }
+        .
     }
 }
