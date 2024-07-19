@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Artifactory') {
             steps{
-                sh 'aws s3 cp $WORKSPACE/target/*.war s3://b90-artifactory/LoginRegisterApp-$BUILD_NUMBER.war'
+                sh 'aws s3 cp $WORKSPACE/target/*.war s3://b-90-adv-docker-k8-terraform-projects/LoginRegisterApp-$BUILD_NUMBER.war'
             }
         }
 
