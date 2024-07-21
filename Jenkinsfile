@@ -25,27 +25,27 @@ pipeline {
             }
         }
         stage('Artifactory') {
-            steps{
+            steps {
                 sh 'aws s3 cp $WORKSPACE/target/*.war s3://b-90-adv-docker-k8-terraform-projects/LoginRegisterApp-$BUILD_NUMBER.war'
             }
         }
         stage('Build Docker Image') {
-            steps{
-                sh ''' cd $WORKSPACE '''
-                sh ''' docker build -t syedumer17/loginregisterapp:$BUILD_NUMBER .'''
+            steps {
+                sh 'cd $WORKSPACE'
+                sh 'docker build -t syedumer17/loginregisterapp:$BUILD_NUMBER .'
             }
         }
-        stage('Registery Login') {
-            steps{
+        stage('Registry Login') {
+            steps {
                 withCredentials([usernamePassword(credentialsId: '7', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                     sh 'docker login -u $USERNAME -p $PASSWORD'
+                }
             }
         }
-        stage('push Docker Image') {
-            steps{
-                sh '''docker build -t syedumer17/loginregisterapp:$BUILD_NUMBER .'''
+        stage('Push Docker Image') {
+            steps {
+                sh 'docker push syedumer17/loginregisterapp:$BUILD_NUMBER'
             }
         }
     }
-}
 }
